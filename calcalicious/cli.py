@@ -1,14 +1,24 @@
+import os
 import click
 
 
-@click.command()
+class ComplexCLI(click.MultiCommand):
+    def list_commands(self, ctx):
+        rv = []
+        for filename in os.listdir(os.path.join(os.path.dirname(__file__),'commands')):
+            if filename.endswith(".py") and not filename.startswith("__"):
+                rv.append(filename.replace('.py',''))
+        rv.sort()
+        return rv
+
+    def get_command(self, ctx, name):
+        try:
+            mod = __import__(f"calcalicious.commands.{name}", None, None, ["cli"])
+        except ImportError:
+            return
+        return mod.cli
+
+@click.command(cls=ComplexCLI)
 def cli():
-    # click.echo('Hello, James')
-    val = addition(2)
-    click.echo(val)
-
-
-def addition(x):
-    if x == 0:
-        return 0
-    return x + x
+    """Welcome to Calcalicious!"""
+    pass
