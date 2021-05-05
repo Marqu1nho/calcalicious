@@ -14,7 +14,10 @@ class Context:
 @click.option("-n", "--numbers", help="Numbers to act on.")
 @click.pass_context
 def cli(ctx,numbers):
-    """collects numbers"""
+    """
+    Takes passed in numbers and performs one of the following commands:
+        -add (adds the numbers together) i.e. "[...]-n 1,2 add" [returns: 3]
+    """
     ctx.obj = Context(numbers)
 
 
